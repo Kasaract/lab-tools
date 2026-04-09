@@ -19,12 +19,12 @@ services:
         scope: RUN_TIME
         value: ${APP_URL}
 
+static_sites:
   - name: frontend
     source_dir: /frontend
-    dockerfile_path: /frontend/Dockerfile
-    http_port: 3000
-    instance_count: 1
-    instance_size_slug: basic-xxs
+    build_command: npm run build
+    output_dir: dist
+    catchall_document: index.html
     github:
       repo: Kasaract/lab-tools
       branch: main
