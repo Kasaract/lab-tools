@@ -20,32 +20,28 @@ References:
 """
 
 import io
-import numpy as np
+
 import cv2
+import numpy as np
 from PIL import Image
-from skimage.color import separate_stains, hdx_from_rgb
-from skimage.filters import threshold_otsu
-from skimage.morphology import (
-    opening,
-    closing,
-    remove_small_objects,
-    disk,
-)
-from skimage.segmentation import watershed
-from skimage.measure import label, regionprops
 from scipy import ndimage
+from skimage.color import hdx_from_rgb, separate_stains
+from skimage.filters import threshold_otsu
+from skimage.measure import label, regionprops
+from skimage.morphology import closing, disk, opening, remove_small_objects
+from skimage.segmentation import watershed
 
 
 def analyze_cells(
     image_bytes: bytes,
     *,
-    pos_thresh: float = 0.7,
-    neg_thresh: float = 0.45,
-    pos_min_area: int = 30,
-    neg_min_area: int = 20,
+    pos_thresh: float = 1.0,
+    neg_thresh: float = 0.8,
+    pos_min_area: int = 90,
+    neg_min_area: int = 50,
     pos_disk_radius: int = 2,
     neg_disk_radius: int = 1,
-    watershed_footprint: int = 8,
+    watershed_footprint: int = 10,
 ) -> dict:
     """
     Main entry point: accepts raw image bytes, returns analysis results.
@@ -211,5 +207,7 @@ def _draw_label_contours(
     """
     for region_label in range(1, labels.max() + 1):
         cell_mask = (labels == region_label).astype(np.uint8) * 255
-        contours, _ = cv2.findContours(cell_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(
+            cell_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
         cv2.drawContours(img, contours, -1, color, thickness)
