@@ -306,11 +306,11 @@ export function CellCountPage() {
             onChange={onFileChange}
             className="hidden"
           />
-          {/* @ts-expect-error webkitdirectory is non-standard */}
           <input
             ref={dirInputRef}
             type="file"
-            webkitdirectory=""
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {...({ webkitdirectory: "" } as any)}
             onChange={onFileChange}
             className="hidden"
           />
@@ -531,11 +531,11 @@ export function CellCountPage() {
             onChange={onFileChange}
             className="hidden"
           />
-          {/* @ts-expect-error webkitdirectory is non-standard */}
           <input
             ref={dirInputRef}
             type="file"
-            webkitdirectory=""
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {...({ webkitdirectory: "" } as any)}
             onChange={onFileChange}
             className="hidden"
           />
